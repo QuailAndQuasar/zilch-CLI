@@ -8,9 +8,13 @@ module ZilchCLI
       end
 
       def reset
-        @api_base_url = nil
+        @api_base_url = 'http://localhost:4567'  # Default Sinatra port
         @api_key = nil
+      end
+
+      def api_base_url
+        @api_base_url || 'http://localhost:4567'
       end
     end
   end
-end 
+end
