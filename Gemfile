@@ -7,7 +7,14 @@ gem 'httparty', '~> 0.21.0'
 gem 'dotenv', '~> 2.8.1'
 gem 'thor', '~> 1.2.1'
 
-group :development do
+group :development, :test do
   gem 'pry', '~> 0.14.1'
   gem 'rubocop', '~> 1.50.0'
+  gem 'rspec', '~> 3.12'
+  gem 'factory_bot', '~> 6.4'
+  gem 'faker', '~> 3.2'
+  gem 'webmock', '~> 3.19'
+  gem 'vcr', '~> 6.2'
+  gem 'simplecov', '~> 0.22'
+  gem 'rspec_junit_formatter', '~> 0.6'
 end 
