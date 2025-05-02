@@ -8,8 +8,13 @@ RSpec.describe ZilchCLI::CLI do
       it 'shows success message and response' do
         response = build(:api_response, :success)
         
-        stub_request(:get, "#{ZilchCLI::Config.api_base_url}/test")
-          .to_return(status: 200, body: response.to_json)
+        allow(ZilchCLI::ApiClient).to receive(:test_connection)
+          .and_return(instance_double(HTTParty::Response, 
+            code: 200,
+            headers: { 'content-type' => 'application/json' },
+            body: response.to_json,
+            success?: true
+          ))
 
         expect { cli.test_connection }.to output(/Connected successfully!/).to_stdout
       end
@@ -17,8 +22,8 @@ RSpec.describe ZilchCLI::CLI do
 
     context 'when API is not available' do
       it 'shows error message' do
-        stub_request(:get, "#{ZilchCLI::Config.api_base_url}/test")
-          .to_return(status: 500)
+        allow(ZilchCLI::ApiClient).to receive(:test_connection)
+          .and_raise(StandardError.new('Connection failed'))
 
         expect { cli.test_connection }.to output(/Failed to connect/).to_stdout
       end
@@ -30,8 +35,8 @@ RSpec.describe ZilchCLI::CLI do
       it 'shows success message and game ID' do
         response = build(:api_response, :game_created)
         
-        stub_request(:post, "#{ZilchCLI::Config.api_base_url}/games")
-          .to_return(status: 200, body: response.to_json)
+        allow(ZilchCLI::ApiClient).to receive(:start_game)
+          .and_return(response)
 
         expect { cli.start_game }.to output(/Game started successfully!/).to_stdout
       end
@@ -39,8 +44,8 @@ RSpec.describe ZilchCLI::CLI do
 
     context 'when game creation fails' do
       it 'shows error message' do
-        stub_request(:post, "#{ZilchCLI::Config.api_base_url}/games")
-          .to_return(status: 500)
+        allow(ZilchCLI::ApiClient).to receive(:start_game)
+          .and_raise(StandardError.new('Game creation failed'))
 
         expect { cli.start_game }.to output(/Failed to start game/).to_stdout
       end

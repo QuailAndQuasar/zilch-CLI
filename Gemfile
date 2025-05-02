@@ -6,6 +6,7 @@ gem 'tty-spinner', '~> 0.9.0'
 gem 'httparty', '~> 0.21.0'
 gem 'dotenv', '~> 2.8.1'
 gem 'thor', '~> 1.2.1'
+gem 'csv', '~> 3.2'
 
 group :development, :test do
   gem 'pry', '~> 0.14.1'
